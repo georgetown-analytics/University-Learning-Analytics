@@ -182,3 +182,117 @@ from
 on asmt.id_student = vle.id_student AND asmt.code_module = vle.code_module AND asmt.code_presentation = vle.code_presentation) as asmtVle
 on stdtreg.id_student = asmtVle.id_student AND stdtreg.code_module = asmtVle.code_module AND stdtreg.code_presentation = asmtVle.code_presentation
 );
+
+/********* SQL DOCUMENTATION *****
+Creates the table for the VLE Features table
+	b4_sum_clicks - this is the number of clicks on the vle before the class started
+	q1_sum_clicks - this is the number clicks during the first quarter of the class defines as the first 60 days
+	q2_sum_clicks - this is the number clicks during the second quarter of the class defines as the first 60 - 120 days
+	q3_sum_clicks - this is the number clicks during the third quarter of the class defines as the first 121 - 180 days
+	q4_sum_clicks - this is the number clicks during the fourth quarter of the class defines as anything between day 181 and the end of class
+	allclick - this is all the clicks by student for a class (ex. 'AAA') for a specific term (ex. 2014J)
+	qtr_sum_clicks - this is the number clicks during the first quarter of the class defined by length of class divided by 4
+	half_sum_click - this is the number clicks during the first quarter of the class defined by length of class divided by 2
+	threeqtr_sum_clicks - this is the number clicks during the first quarter of the class defined by length of class times 3/4
+	qtr_half_sum_clicks - this is the number clicks between during the first quarter of the class and the first half of the class
+	half_threeqtr_sum_clicks - this is the number clicks between during the first half of the class and the 3/4 mark of the class
+	thrd_sum_clicks - this is the number clicks during the first quarter of the class defined by length of class divided by 3
+	twothrd_sum_clicks - this is the number clicks during the first quarter of the class defined by length of class time 2/3
+	thrd_twothrd_sum_clicks is the number clicks between during the first third of the class and the second third of the class
+	
+	
+*********** SQL DOCUMENTATION ******/
+
+CREATE TABLE public."studentVleFeatures2"
+  AS (
+select vle.id_student, vle.code_module, vle.code_presentation,
+sum(CASE
+    		WHEN date_iact < 0 THEN sum_click
+    		ELSE 0
+		END) as b4_sum_clicks,	
+sum(CASE
+    		WHEN date_iact between 0 and 60 THEN sum_click
+    		ELSE 0
+		END) as q1_sum_clicks,
+sum(CASE
+    		WHEN date_iact between 61 and 120 THEN sum_click
+    		ELSE 0
+		END) as q2_sum_clicks,
+sum(CASE
+    		WHEN date_iact between 121 and 180 THEN sum_click
+    		ELSE 0
+		END) as q3_sum_clicks,
+sum(CASE
+    		WHEN date_iact > 180 THEN sum_click
+    		ELSE 0
+		END) as q4_sum_clicks,
+sum(sum_click) as allclicks,
+sum(CASE
+    		WHEN date_iact between 0 and module_presentation_length/4 THEN sum_click
+    		ELSE 0
+		END) as qtr_sum_clicks,
+sum(CASE
+    		WHEN date_iact between 0 and module_presentation_length/2 THEN sum_click
+    		ELSE 0
+		END) as half_sum_clicks,
+sum(CASE
+    		WHEN date_iact between 0 and module_presentation_length*3/4 THEN sum_click
+    		ELSE 0
+		END) as threeqtr_sum_clicks,
+sum(CASE
+    		WHEN date_iact between module_presentation_length/4 and module_presentation_length/2 THEN sum_click
+    		ELSE 0
+		END) as qtr_half_sum_clicks,
+sum(CASE
+    		WHEN date_iact between module_presentation_length/2+1 and module_presentation_length*3/4 THEN sum_click
+    		ELSE 0
+		END) as half_threeqtr_sum_clicks,	
+sum(CASE
+    		WHEN date_iact between 0 and module_presentation_length/3 THEN sum_click
+    		ELSE 0
+		END) as thrd_sum_clicks,
+sum(CASE
+    		WHEN date_iact between 0 and module_presentation_length*2/3 THEN sum_click
+    		ELSE 0
+		END) as twothrd_sum_clicks,
+sum(CASE
+    		WHEN date_iact between module_presentation_length/3+1 and module_presentation_length/2 THEN sum_click
+    		ELSE 0
+		END) as thrd_twothrd_sum_clicks
+from public."studentVleFULLSTG" as vle, public."coursesSTG" as crse
+where vle.code_module = crse.code_module and vle.code_presentation = crse.code_presentation
+group by vle.id_student, vle.code_module, vle.code_presentation
+order by vle.id_student, vle.code_module, vle.code_presentation
+);
+
+
+/*********** SQL DOCUMENTATION *****
+    Creates a new analysisFeatures tables with the new data from above
+    Had to use LEFT OUTER JOIN to make sure all the students were represented snce since students didn't have any VLE activity
+ ********* SQL DOCUMENTATION *******/
+CREATE TABLE public."analysisFeatures2"
+  AS (
+select fte.*,
+vle.qtr_sum_clicks,
+vle.half_sum_clicks,
+vle.threeqtr_sum_clicks,
+vle.qtr_half_sum_clicks,
+vle.half_threeqtr_sum_clicks,	
+vle.thrd_sum_clicks,
+vle.twothrd_sum_clicks,
+vle.thrd_twothrd_sum_clicks
+from public."analysisFeatures" fte LEFT JOIN public."studentVleFeatures2" vle
+ON vle.id_student = fte.id_student and vle.code_module = fte.code_module and vle.code_presentation = fte.code_presentation
+order by vle.id_student, vle.code_module, vle.code_presentation
+);
+
+/*********** SQL DOCUMENTATION *****
+    Renames the old table with suffix of "Org" for original
+    Renames new table to analysisFeatures to make sure python code isn't impacted
+ ********* SQL DOCUMENTATION *******/
+ALTER TABLE public."analysisFeatures"
+RENAME TO "analysisFeaturesOrg";
+	
+ALTER TABLE public."analysisFeatures2"
+RENAME TO "analysisFeatures";
+
