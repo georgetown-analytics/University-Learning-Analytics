@@ -41,18 +41,44 @@ order by id_student, code_module, code_presentation
 Jinna to add comment
 
 Creates the table for the studentAssessment Features table
-TMA_CMA_assmt_score : The percentage of TMA score and CMA score
-TMA_assmt_score : The percentage of CMA score
-CMA_assmt_score : The percentage of CMA score
-total_weight : The combinded weight of CMA and TMA
-final_exam : 1 mean if students have final exam, 0 mean students have no final exam
-is_reenrolled : >=1 mean students re-enrolled
+std_half_score : The combinded score of TMA and CMA half way term
+std_total_weight : The combinded weight of CMA and TMA
 final_exam_score : final exam score
 
 *********** SQL DOCUMENTATION ***** */
 
+CREATE TABLE public."studentAssessmentFeatures"
+AS
+   (  SELECT id_student,
+             code_module,
+             code_presentation,
+             sum (
+                CASE
+                   WHEN assessment_type IN ('CMA', 'TMA') and date_submitted <= hlf_module_lenght
+                   THEN
+                      (weight * score) / 100
+                   ELSE
+                      0
+                END)
+                AS std_half_weight_score,
+             sum (
+                CASE
+                   WHEN assessment_type IN ('CMA', 'TMA') THEN (weight * score) / 100
+                   ELSE 0
+                END)
+             AS std_total_score,
+              sum (
+                CASE
+                   WHEN assessment_type IN ('CMA', 'TMA') THEN weight
+                   ELSE 0
+                END)
+             AS std_total_weight
+        FROM public."studentAssessmentFULLHLFSTG"
+        where is_banked = 0
+    GROUP BY id_student, code_module, code_presentation
+    );
 
-CREATE TABLE public."studentAssessmentFeaturesSTG"
+/*CREATE TABLE public."studentAssessmentFeaturesSTG"
 AS
    (  SELECT id_student,
              code_module,
@@ -91,7 +117,7 @@ AS
              count (CASE WHEN is_banked = '1' THEN 1 ELSE NULL END)
                 AS is_reenrolled
         FROM public."studentAssessmentFULLSTG"
-    GROUP BY id_student, code_module, code_presentation);
+    GROUP BY id_student, code_module, code_presentation);*/
 
 /********* SQL DOCUMENTATION *****
 Creates the table for the Student Course Registration Features table
