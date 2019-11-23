@@ -14,4 +14,6 @@ missingno 			0.4.2
 yellowbrick			1.0.1
 pgAdmin4			4.12
 PostgreSQL 			11.5
- 			
+ToadEdge			2.1.1	
+JupyterLab			1.0.2
+jupyter notebook 		6.0.0	
