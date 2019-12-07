@@ -1,0 +1,38 @@
+Universal Learning Analytics 
+
+Data Dictionary for FinalData.csv (Data Frame)
+
+
+
+index                           int64
+Scotland                        (int64) Indicator of Student Region after Encoding
+East Anglian Region             (int64) Indicator of Student Region after Encoding
+London Region                   (int64) Indicator of Student Region after Encoding
+South Region                    (int64) Indicator of Student Region after Encoding
+North Western Region            (int64) Indicator of Student Region after Encoding
+West Midlands Region            (int64) Indicator of Student Region after Encoding
+South West Region               (int64) Indicator of Student Region after Encoding
+East Midlands Region            (int64) Indicator of Student Region after Encoding
+South East Region               (int64) Indicator of Student Region after Encoding
+Wales                           (int64) Indicator of Student Region after Encoding
+Yorkshire Region                (int64) Indicator of Student Region after Encoding
+North Region                    (int64) Indicator of Student Region after Encoding
+Ireland                         (int64) Indicator of Student Region after Encoding
+id_student                      (int64) Student Identification Number that was Anonymized
+code_module                     (int64) Identification Code of Module, to which the student is registered
+module_domain                   (int64) Indicator of (Social Science = 0, or STEM = 1)
+module_presentation_length      (int64) Length of Module Presentation in Days
+term                            (int64) Indicator of Module Term (J = 0 - Fall, B = 1 - Spring)
+year                            (int64) Indicator of Module Year (2013 = 0, 2014 = 1)
+num_of_prev_attempts            (int64) Number of times the student has attempted module
+final_result                    (int64) Indicator of Student [Failing (Withdraw 0,Fail 0) or Passing (Pass 1, Distinction 1)]
+date_registration             (float64) The date of Student's registration relative to start of module presentation (-20 means the student registered to the module 20 days before it started)
+disability                      (int64) Indicator if Student has declared a disability (No = 0, Yes =1)
+gender                          (int64) Indicator of Student gender (M = 0, F = 1)
+age_band                        (int64) Age Band of Student's Age
+highest_education               (int64) Highest Student Education Level upon entry to module presentation
+imd_band                      (float64) Poverty Index Indicator (Index of Multiple Depravation band) of place where student lived 
+studied_credits                 (int64) Student load, Total number of credits for the module the student is currently studying
+b4_sum_clicks                 (float64) measure of student interactions with VLE prior to start of module presentation
+half_sum_clicks               (float64) measure of student interactions halfway through module presentation
+std_half_score                (float64) Student Score on Assessments halfway through module presentation 
