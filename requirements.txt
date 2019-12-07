@@ -7,15 +7,15 @@ Name				Version
 python3				3.7.3
 psycopg2			2.8.4
 pandas 				0.24.2
-numpy				  1.16.2
-matplotlib 		3.0.3
+numpy				1.16.2
+matplotlib 			3.0.3
 seaborn				0.9.0
-missingno 		0.4.2
-yellowbrick		1.0.1
+missingno 			0.4.2
+yellowbrick			1.0.1
 pgAdmin4			4.12
-PostgreSQL 		11.5
+PostgreSQL 			11.5
 ToadEdge			2.1.1	
-JupyterLab		1.0.2
+JupyterLab			1.0.2
 jupyter notebook 		6.0.0	
-pydotplus     2.0.2
-graphviz      0.13.2
+pydotplus 			2.0.2
+graphviz			0.13.2
