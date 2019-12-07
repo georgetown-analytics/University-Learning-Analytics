@@ -4,7 +4,7 @@ Data Dictionary for FinalData.csv (Data Frame)
 
 
 
-index                           int64
+index                           (int64)
 Scotland                        (int64) Indicator of Student Region after Encoding
 East Anglian Region             (int64) Indicator of Student Region after Encoding
 London Region                   (int64) Indicator of Student Region after Encoding
@@ -35,4 +35,4 @@ imd_band                      (float64) Poverty Index Indicator (Index of Multip
 studied_credits                 (int64) Student load, Total number of credits for the module the student is currently studying
 b4_sum_clicks                 (float64) measure of student interactions with VLE prior to start of module presentation
 half_sum_clicks               (float64) measure of student interactions halfway through module presentation
-std_half_score                (float64) Student Score on Assessments halfway through module presentation 
+std_half_score                (float64) Student weighted Score on all Assessments halfway through module presentation 
