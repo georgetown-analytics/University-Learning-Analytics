@@ -35,4 +35,6 @@ imd_band                      (float64) Poverty Index Indicator (Index of Multip
 studied_credits                 (int64) Student load, Total number of credits for the module the student is currently studying
 b4_sum_clicks                 (float64) measure of student interactions with VLE prior to start of module presentation
 half_sum_clicks               (float64) measure of student interactions halfway through module presentation
+allclicks                     (float64) measure of student interactions for entire module presentation
 std_half_score                (float64) Student weighted Score on all Assessments halfway through module presentation 
+
