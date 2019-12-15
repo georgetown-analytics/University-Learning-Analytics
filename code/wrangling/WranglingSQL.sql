@@ -1,4 +1,68 @@
 
+/*** Create the tables needed and then used Toad to import the CSV files
+CREATE TABLE Public.”coursesSTG” (code_module varchar(45), code_presentation varchar(45), module_presentation_length int);
+CREATE TABLE Public.”assessmentsSTG“ (code_module varchar(45), code_presentation varchar(45), id_assessment int, assessment_type varchar(45), date_set text, weight numeric);
+CREATE TABLE Public.”studentAssessmentSTG” (id_assessment int, id_student int, date_submitted int, is_banked int, score text);
+CREATE TABLE Public.”studentRegistrationSTG” (code_module varchar(45), code_presentation varchar(45), id_student int, date_registration text, date_unregistration text);
+CREATE TABLE Public.”studentVleSTG” (code_module varchar(45), code_presentation varchar(45), id_student int, id_site int, date_set text, sum_click int);
+CREATE TABLE Public.”vleSTG” (id_site int, code_module varchar(45), code_presentation varchar(45), activity_type text, week_from text, week_to text);
+CREATE TABLE Public."studentInfoSTG" (code_module varchar(45), code_presentation varchar(45), id_student int, gender varchar(3), region varchar(45), highest_education varchar(45), imd_band varchar(16), age_band varchar(16), num_of_prev_attempts int, studied_credits int, disability varchar(3), final_result varchar(45));
+***/
+
+/** Creating the three combined data tables with the logical grouping of data for Assessments, VLE, and Student Registration and Course Information Combines**/
+
+/** Creates a combined assessment table **/
+CREATE TABLE public."studentAssessmentFULLSTG"
+  AS (
+	SELECT
+		stdtasmt.*,
+	    asmt.code_module,
+	    asmt.code_presentation,
+		asmt.assessment_type,
+		asmt.final_sub_date,
+		asmt.weight
+	FROM
+		public."assessmentsSTG" as asmt,
+		public."studentAssessmentSTG" as stdtasmt
+	WHERE
+		asmt.id_assessment = stdtasmt.id_assessment
+	ORDER BY stdtasmt.id_student, asmt.code_module, asmt.code_presentation
+  );
+
+/** Creates a combined VLE table **/
+CREATE TABLE public."studentVleFULLSTG"
+  AS (
+	SELECT
+	stdtvle.*,
+	vle.activity_type,
+	vle.week_from,
+	vle.week_to
+FROM
+	public."vleSTG" as vle,
+	public."studentVleSTG" as stdtvle
+WHERE
+	vle.id_site = stdtvle.id_site and vle.code_presentation = stdtvle.code_presentation and vle.code_module = stdtvle.code_module
+ORDER BY stdtvle.id_student, stdtvle.code_module, stdtvle.code_presentation
+  );
+  
+/** Creates a combined Student, Registration, and Courses table **/
+CREATE TABLE public."studentCourseRegistationFULLSTG"
+  AS (
+	SELECT 
+		stdt.*,
+		stdtreg.data_registration,
+		stdtreg.data_unregistration,
+		crse.module_presentation_length
+	FROM
+		public."studentInfoSTG" as stdt,
+		public."coursesSTG" as crse,
+		public."studentRegistrationSTG" as stdtreg
+	WHERE
+		stdt.id_student = stdtreg.id_student and stdt.code_presentation = stdtreg.code_presentation and stdt.code_module = stdtreg.code_module
+		AND crse.code_presentation = stdtreg.code_presentation and crse.code_module = stdtreg.code_module
+	ORDER BY stdtreg.id_student, stdtreg.code_module, stdtreg.code_presentation
+  );
+
 /********* SQL DOCUMENTATION *****
 Creates the table for the VLE Features table
 	b4_sum_clicks - this is the number of clicks on the vle before the class started
