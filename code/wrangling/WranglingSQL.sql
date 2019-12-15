@@ -10,6 +10,23 @@ Steps:
 
 Run List **/
 
+/** Contents of this SQL file
+
+studentAssessmentFULLSTG - Combines all the original data from the assessment and Student Asessment tables
+studentVleFULLSTG - Combines all the original data from the VLE and the Student VLE activities
+studentCourseRegistationFULLSTG - Combines all the original data from the Student, Course, and Registation tables
+studentVleFeatures - Feature Engineering for all the VLE activities
+studentAssessmentFeatures - Feature Engineering for all the assessment outcomes
+studentCourseRegistrationFeatures - Feature Engineering for all the student, course and registration information
+analysisFeatures - Combines all the feature tables into one table
+studentVleFeatures2 - Second pass at creating VLE features for modeling; expanded the split of the activity over the course
+analysisFeatures2 - Second pass at combining all the features into one table
+hlf - Part 1 of building new features based on what a student has done at the half way mark of the course
+hlf2 - Part 2 of building new features based on what a student has done at the half way mark of the course
+studentAssessmentFULLHLF2STG - Creates staging table part 1 for half term calculations uses in the machine learning and feature analysis
+studentAssessmentFULLHLF3STG - Creates staging table part 2 for half term calculations uses in the machine learning and feature analysis
+
+**/
 
 /*** Create the tables needed and then used Toad to import the CSV files
 CREATE TABLE Public.”coursesSTG” (code_module varchar(45), code_presentation varchar(45), module_presentation_length int);
