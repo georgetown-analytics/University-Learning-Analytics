@@ -1,4 +1,16 @@
 
+/ ** Run List
+
+Steps:
+(1) Run this SQL to build the key tables and features tables for analysis.  You must do this while connecting to a database
+(2) Run Score_wranging.ipynb in Jupyter Notebook
+(3) Run Data_wrangling_2.ipynb in Jupyter Notebook
+(4) Run ne_Hot_Coding_Regions_and_Final_Wrangling.ipynb in Jupyter Notebook
+(5) Run Finalize Data for Features Dataset.ipynb in Jupyter Notebook
+
+Run List **/
+
+
 /*** Create the tables needed and then used Toad to import the CSV files
 CREATE TABLE Public.”coursesSTG” (code_module varchar(45), code_presentation varchar(45), module_presentation_length int);
 CREATE TABLE Public.”assessmentsSTG“ (code_module varchar(45), code_presentation varchar(45), id_assessment int, assessment_type varchar(45), date_set text, weight numeric);
