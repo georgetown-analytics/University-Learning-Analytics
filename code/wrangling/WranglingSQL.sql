@@ -398,3 +398,45 @@ RENAME TO "analysisFeaturesOrg";
 ALTER TABLE public."analysisFeatures2"
 RENAME TO "analysisFeatures";
 
+/**  Logic and table create for the half course features **/
+
+-- ** Builds a table to combine course and assessment information **
+create table public."hlf" As 
+(
+SELECT asmt.*, crse.module_presentation_length, crse.module_presentation_length / 2 as hlf_module_length
+FROM public."coursesSTG" crse, public."assessmentsSTG" asmt
+WHERE crse.code_module = asmt.code_module AND crse.code_presentation = asmt.code_presentation
+);
+
+-- ** Creates features for assessment scores and logic for weights for half the term **
+create table public."hlf2" As 
+(
+select code_module, code_presentation, hlf_module_length,
+sum(
+	case when final_sub_date <= hlf_module_length then weight
+	else 0
+	end ) as hlf_weight
+from public."hlf"
+group by code_module, code_presentation, hlf_module_length
+);
+
+-- ** Creates staging table part 1 for half term calculations uses in the machine learning and feature analysis **
+create table public."studentAssessmentFULLHLF2STG" As 
+(
+select asmt.*, crse.hlf_module_length, hlf_weight
+from public."studentAssessmentFULLSTG" asmt, public."hlf2" crse
+where
+crse.code_module = asmt.code_module AND crse.code_presentation = asmt.code_presentation
+--crse.id_assessment = asmt.id_assessment
+);
+
+-- ** Creates staging table part 2 for half term calculations uses in the machine learning and feature analysis **
+create table public."studentAssessmentFULLHLF3STG" As 
+(
+SELECT asmt.*, stdt.final_result, stdt.date_unregistration
+FROM public."studentAssessmentFULLHLF2STG" asmt, public."studentCourseRegistrationFULLSTG" stdt
+--from public."studentAssessmentFULLHLF2STG" asmt LEFT JOIN public."studentCourseRegistrationFULLSTG" stdt
+WHERE stdt.code_module = asmt.code_module AND stdt.code_presentation = asmt.code_presentation AND stdt.id_student = asmt.id_student
+--ON stdt.code_module = asmt.code_module AND stdt.code_presentation = asmt.code_presentation AND stdt.id_student = asmt.id_student
+);
+
