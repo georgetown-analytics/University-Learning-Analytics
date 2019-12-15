@@ -1,7 +1,6 @@
 Universal Learning Analytics 
 
-Data Dictionary for FinalData.csv (Data Frame)
-
+Data Dictionary 
 
 
 index                           (int64)
@@ -25,7 +24,7 @@ module_presentation_length      (int64) Length of Module Presentation in Days
 term                            (int64) Indicator of Module Term (J = 0 - Fall, B = 1 - Spring)
 year                            (int64) Indicator of Module Year (2013 = 0, 2014 = 1)
 num_of_prev_attempts            (int64) Number of times the student has attempted module
-final_result                    (int64) Indicator of Student [Failing (Withdraw 0,Fail 0) or Passing (Pass 1, Distinction 1)]
+final_result                    (int64) Indicator of Student Failing - 0 Passing 1 
 date_registration             (float64) The date of Student's registration relative to start of module presentation (-20 means the student registered to the module 20 days before it started)
 disability                      (int64) Indicator if Student has declared a disability (No = 0, Yes =1)
 gender                          (int64) Indicator of Student gender (M = 0, F = 1)
@@ -35,6 +34,15 @@ imd_band                      (float64) Poverty Index Indicator (Index of Multip
 studied_credits                 (int64) Student load, Total number of credits for the module the student is currently studying
 b4_sum_clicks                 (float64) measure of student interactions with VLE prior to start of module presentation
 half_sum_clicks               (float64) measure of student interactions halfway through module presentation
-allclicks                     (float64) measure of student interactions for entire module presentation
+threeqtr_sum_clicks	      (float64) this is the number clicks during the first quarter of the class defined by length of class times 3/4
+qtr_half_sum_clicks	      (float64) this is the number clicks during the first quarter of the class defined by length of class divided by 4
+half_threeqtr_sum_clicks.     (float64) this is the number clicks between during the first half of the class and the 3/4 mark of the class
+thrd_sum_clicks		      (float64) this is the number clicks during the first quarter of the class defined by length of class divided by 3
+twothrd_sum_clicks	      (float64) this is the number clicks during the first quarter of the class defined by length of class time 2/3
+thrd_twothrd_sum_clicks	      (float64) this is the number clicks between during the first third of the class and the second third of the class
+allclick                      (float64) this is all the clicks by student for a class (ex. 'AAA') for a specific term (ex. 2014J)
 std_half_score                (float64) Student weighted Score on all Assessments halfway through module presentation 
+
+
+
 
